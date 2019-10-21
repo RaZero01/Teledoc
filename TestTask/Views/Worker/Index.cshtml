@@ -1,0 +1,114 @@
+﻿@model TestTask.ViewModels.WorkerIndexData
+
+@{
+    ViewBag.Title = "Workers";
+}
+
+<h2>Workers</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>Last Name</th>
+        <th>First Name</th>
+        <th>Hire Date</th>
+        <th>Office</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Workers)
+    {
+        string selectedRow = "";
+        if (item.ID == ViewBag.WorkerID)
+        {
+            selectedRow = "success";
+        }
+        <tr class="@selectedRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstMidName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HireDate)
+            </td>
+            <td>
+                @if (item.Office != null)
+                {
+                    @item.Office.Location
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Select", "Index", new { id = item.ID }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@if (Model.Organizations != null)
+{
+    <h3>Organizations Where selected worker works</h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Department</th>
+        </tr>
+
+        @foreach (var item in Model.Organizations)
+        {
+            string selectedRow = "";
+            if (item.OrganizationID == ViewBag.OrganizationID)
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.ActionLink("Select", "Index", new { courseID = item.OrganizationID })
+                </td>
+                <td>
+                    @item.OrganizationID
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Department.Title
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+@if (Model.Enrollments != null)
+{
+    <h3>
+        Clietns Enrolled in Selected Organization
+    </h3>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Payed</th>
+        </tr>
+        @foreach (var item in Model.Enrollments)
+        {
+            <tr>
+                <td>
+                    @item.Client.FullName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Payed)
+                </td>
+            </tr>
+        }
+    </table>
+}
